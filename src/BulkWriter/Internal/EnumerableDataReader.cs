@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Linq;
 using BulkWriter.Properties;
@@ -21,9 +20,9 @@ namespace BulkWriter.Internal
         public EnumerableDataReader(IEnumerable<TResult> items, IEnumerable<PropertyMapping> propertyMappings)
         {
             _items = items ?? throw new ArgumentNullException(nameof(items));
-            _propertyMappings = propertyMappings?.OrderBy(x => x.Destination.ColumnOrdinal).ToArray() ?? throw new ArgumentNullException(nameof(propertyMappings));
+            _propertyMappings = propertyMappings?.OrderBy(x => x.Source.Ordinal).ToArray() ?? throw new ArgumentNullException(nameof(propertyMappings));
 
-            _ordinalToPropertyMappings = _propertyMappings.ToDictionary(x => x.Destination.ColumnOrdinal);
+            _ordinalToPropertyMappings = _propertyMappings.ToDictionary(x => x.Source.Ordinal);
             _nameToOrdinalMappings = _propertyMappings.ToDictionary(x => x.Source.Property.Name, x => x.Destination.ColumnOrdinal);
         }
 
